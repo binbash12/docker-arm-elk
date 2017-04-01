@@ -18,21 +18,19 @@ RUN mkdir -p /opt/kibana
 RUN mkdir -p /opt/kibana/node/bin/node
 RUN mkdir -p /opt/kibana/node/bin/npm
 
-#RUN mkdir -p /var/log/supervisor
-#RUN mkdir -p /usr/share/elasticsearch
-#RUN mkdir -p /etc/elasticsearch
-#RUN mkdir -p /opt/logstash
-##RUN mkdir -p /opt/logstash/vendor/jar/jni/arm-Linux
-#RUN mkdir -p /etc/logstash/conf.d
-#RUN mkdir -p /var/log/logstash
+RUN tar -zxvf kibana-4.6.1-linux-x86_64.tar.gz
+workdir /root/kibana-4.6.1-linux-x86_64
+RUN mv * /opt/kibana/
+workdir /root
 
-RUN tar -zxvf kibana-4.6.1-linux-x86_64.tar.gz -C /opt/kibana
+RUN rm -rf kibana-4.6.1-linux-x86_64* *.deb
 
 RUN apt-get -y install ant git build-essential openjdk-7-jdk
+RUN mkdir -p /opt/logstash/vendor/bundle/jruby/1.9/lib/jni/arm-Linux/
 RUN git clone https://github.com/jnr/jffi.git
 workdir /root/jffi
 RUN ant jar
-RUN cp build/jni/libjffi-1.2.so /opt/logstash/vendor/jruby/lib/jni/arm-Linux/
+RUN cp build/jni/libjffi-1.2.so /opt/logstash/vendor/bundle/jruby/1.9/lib/jni/arm-Linux/
 RUN apt-get -y remove ant git build-essential openjdk-7-jdk
 workdir /root
 
@@ -43,6 +41,7 @@ RUN ln -s /usr/local/bin/node /opt/kibana/node/bin/node
 RUN ln -s /usr/local/bin/npm /opt/kibana/node/bin/npm
 
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
+COPY conf/config /usr/share/elasticsearch/config
 COPY conf/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 COPY conf/logging.yml /etc/elasticsearch/logging.yml
 COPY conf/kibana.yml /etc/kibana/kibana.yml
