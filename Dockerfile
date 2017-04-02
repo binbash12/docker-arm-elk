@@ -15,15 +15,11 @@ RUN dpkg -i logstash-2.4.0_all.deb
 RUN mkdir -p /opt/es/data
 RUN mkdir -p /etc/kibana
 RUN mkdir -p /opt/kibana
-RUN mkdir -p /opt/kibana/node/bin/node
-RUN mkdir -p /opt/kibana/node/bin/npm
 
 RUN tar -zxvf kibana-4.6.1-linux-x86_64.tar.gz
 workdir /root/kibana-4.6.1-linux-x86_64
 RUN mv * /opt/kibana/
 workdir /root
-
-RUN rm -rf kibana-4.6.1-linux-x86_64* *.deb
 
 RUN apt-get -y install ant git build-essential openjdk-7-jdk
 RUN mkdir -p /opt/logstash/vendor/bundle/jruby/1.9/lib/jni/arm-Linux/
@@ -40,10 +36,13 @@ RUN mv /opt/kibana/node/bin/npm /opt/kibana/node/bin/npm.orig
 RUN ln -s /usr/local/bin/node /opt/kibana/node/bin/node
 RUN ln -s /usr/local/bin/npm /opt/kibana/node/bin/npm
 
+RUN rm -rf kibana* *.deb jffi
+RUN echo "export JAVA_OPTIONS=-Xmx512M" >> .bashrc
+RUN mkdir -p /usr/share/elasticsearch/config/scripts
+
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
-COPY conf/config /usr/share/elasticsearch/config
-COPY conf/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
-COPY conf/logging.yml /etc/elasticsearch/logging.yml
+COPY conf/elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
+COPY conf/logging.yml /usr/share/elasticsearch/config/logging.yml
 COPY conf/kibana.yml /etc/kibana/kibana.yml
 COPY conf/logstash.conf /etc/logstash/conf.d/logstash.conf
 
