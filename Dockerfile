@@ -37,12 +37,12 @@ RUN ln -s /usr/local/bin/node /opt/kibana/node/bin/node
 RUN ln -s /usr/local/bin/npm /opt/kibana/node/bin/npm
 
 RUN rm -rf kibana* *.deb jffi
-RUN echo “export JAVA_OPTIONS=-Xmx512M” >> .bashrc
+RUN echo "export JAVA_OPTIONS=-Xmx512M" >> .bashrc
+RUN mkdir -p /usr/share/elasticsearch/config/scripts
 
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
-COPY conf/config /usr/share/elasticsearch/config
-COPY conf/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
-COPY conf/logging.yml /etc/elasticsearch/logging.yml
+COPY conf/elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
+COPY conf/logging.yml /usr/share/elasticsearch/config/logging.yml
 COPY conf/kibana.yml /etc/kibana/kibana.yml
 COPY conf/logstash.conf /etc/logstash/conf.d/logstash.conf
 

@@ -142,7 +142,7 @@ cluster.name: elk_elasticsearch
 
 # Path to directory containing configuration (this file and logging.yml):
 #
-path.conf: /opt/elasticsearch/
+path.conf: /usr/share/elasticsearch/
 
 # Path to directory where to store index data allocated for this node.
 #
@@ -157,15 +157,15 @@ path.data: /opt/es/data
 
 # Path to temporary files:
 #
-#path.work: /path/to/work
+path.work: /tmp
 
 # Path to log files:
 #
-#path.logs: /workspace/logs
+path.logs: /var/log/elasticsearch/
 
 # Path to where plugins are installed:
 #
-#path.plugins: /path/to/plugins
+path.plugins: /usr/share/elasticsearch/plugins
 
 
 #################################### Plugin ###################################
