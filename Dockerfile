@@ -45,6 +45,7 @@ COPY conf/elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
 COPY conf/logging.yml /usr/share/elasticsearch/config/logging.yml
 COPY conf/kibana.yml /etc/kibana/kibana.yml
 COPY conf/logstash.conf /etc/logstash/conf.d/logstash.conf
+COPY conf/sysctl.conf /etc/sysctl.conf
 
 CMD ["/usr/bin/supervisord"]
 EXPOSE 9200 9300 5601 5000/udp 6666
